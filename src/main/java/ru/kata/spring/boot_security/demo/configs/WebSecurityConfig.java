@@ -19,35 +19,29 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserServiceImpl userService;
 
     @Autowired
-    public WebSecurityConfig(SuccessUserHandler successUserHandler, UserServiceImpl userService) {
-        this.successUserHandler = successUserHandler;
+    public WebSecurityConfig(UserServiceImpl userService, SuccessUserHandler successUserHandler) {
         this.userService = userService;
+        this.successUserHandler = successUserHandler;
     }
 
-
-    
     // Здесь мы можем указать куда у пользователя есть доступ, а куда нет.
     // Где пользователю требуются какие-то роли, права доступа
     // или как пользователь должен вбивать логин и пароль
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-                .authorizeRequests()
-                .antMatchers("/", "/index").permitAll() //если наш адрес
-                // от корня начинается с // или с /index то в этом случае мы разрешаем всем заходить
-                .anyRequest().authenticated() // на эту страницу могут заходить аутентифицированные пользователи
-                .and() // своего рода разделитель
-                .formLogin().successHandler(successUserHandler) //форма для ввода
-                .permitAll()
+        http.authorizeRequests()
+                .antMatchers("/user").authenticated()
+                .antMatchers("/admin/**").hasRole("ADMIN")
                 .and()
-                .logout()
-                .permitAll();
+                .formLogin().successHandler(successUserHandler)
+                .and()
+                .logout().permitAll();
 
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+    public static PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder(12);
     }
 
     @Bean
@@ -57,6 +51,4 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         authenticationProvider.setUserDetailsService(userService);
         return authenticationProvider;
     }
-
-
 }

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Update user</title>
+</head>
+<body>
+<div th:align="center">
+    <h2><a th:href="@{/logout}" th:text="LogOut"></a></h2>
+    <h2><a th:href="@{/admin}" th:text="BACK"></a></h2>
+</div>
+<div th:align="center">
+    <form th:method="PUT" th:action="@{/admin/userUpdate}" th:object="${user}">
+        <label for="name">Name</label>
+        <input type="text" th:field="*{username}" id="name">
+        <label for="name">Surname</label>
+        <input type="text" th:field="*{lastName}" id="surname">
+        <br>
+        <label for="name">Age</label>
+        <input type="text" th:field="*{age}" id="age">
+        <label for="name">Email</label>
+        <input type="text" th:field="*{email}" id="email">
+        <label for="name">Password</label>
+        <input type="text" th:field="*{password}" id="password">
+        <label>Roles: </label>
+        <select th:field ="*{roles}">
+            <option th:each="role : ${roles}"
+                    th:text="${role.name}"
+                    th:value="${role.id}">
+            </option>
+        </select>
+        <input type="hidden" th:field="*{id}" id="id">
+        <br>
+        <input type="submit" value="Update user"/>
+    </form>
+</div>
+</body>
+</html>

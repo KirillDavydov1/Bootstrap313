@@ -17,22 +17,29 @@ public class User implements UserDetails {
 
     private String username;
 
+    private String lastName;
+
+    private Long age;
+
     private String email;
 
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"),
-    inverseJoinColumns = @JoinColumn(name = "role_id"))
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
     private List<Role> roles;
 
     public User() {
     }
 
-    public User(String username, String email, String password) {
+    public User(String username, String lastName, Long age, String email, String password, List<Role> roles) {
         this.username = username;
+        this.lastName = lastName;
+        this.age = age;
         this.email = email;
         this.password = password;
+        this.roles = roles;
     }
 
     public Long getId() {
@@ -52,6 +59,22 @@ public class User implements UserDetails {
         this.username = username;
     }
 
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public Long getAge() {
+        return age;
+    }
+
+    public  void setAge(Long age) {
+        this.age = age;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -66,6 +89,7 @@ public class User implements UserDetails {
     }
 
     public void setPassword(String password) {
+
         this.password = password;
     }
 
@@ -83,24 +107,41 @@ public class User implements UserDetails {
         //Мы будем получать роли, которые есть у юзера и получать коллекцию прав, которые есть у этого юзера.
         return getRoles();
     }
+
     //Аккаунт не просрочен
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
+
     //аккаунт не заблокирован
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
+
     // пароль не просрочен
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
+
     //аккаунт включен и он работает
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", age=" + age +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", roles=" + roles +
+                '}';
     }
 }
