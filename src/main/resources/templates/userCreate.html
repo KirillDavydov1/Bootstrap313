@@ -21,15 +21,16 @@
         <label for="name">Email</label>
         <input type="text" th:field="*{email}" id="email">
 
-        <label>ROLES</label>
-        <input type="checkbox" name="roles"
-               th:each="role : ${roles}"
-               th:text="${role.role}"
-               th:value="${role.id}"
-        >
         <label for="name">Password</label>
         <input type="text" th:field="*{password}" id="password">
         <br>
+        <label>Roles: </label>
+        <select th:field ="*{roles}">
+            <option th:each="role : ${roles}"
+                    th:text="${role.name}"
+                    th:value="${role.id}">
+            </option>
+        </select>
         <input type="submit" value="Create User!"/>
     </form>
 </div>
