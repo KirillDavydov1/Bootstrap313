@@ -1,6 +1,7 @@
-package ru.kata.spring.boot_security.demo.controllers;
+package ru.kata.spring.boot_security.demo.configs.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -16,28 +17,34 @@ public class AdminController {
     private final UserService userService;
     private final RoleService roleService;
 
-    @Autowired
     public AdminController(UserService userService, RoleService roleService) {
         this.userService = userService;
         this.roleService = roleService;
     }
 
     @GetMapping
-    public String findAll(Model model) {
+    public String findAll(Model model, @AuthenticationPrincipal User user) {
         model.addAttribute("users", userService.findAll());
+        model.addAttribute("currentUser", user);
+        model.addAttribute("newUser", new User());
+        model.addAttribute("roles", roleService.findAll());
         return "userList";
     }
 
-    @GetMapping("/userCreate")
-    public String createUserForm(Model model) {
-        model.addAttribute("user", new User());
-        model.addAttribute("roles", roleService.findAll());
-        return "userCreate";
+    @PostMapping
+    public String save(@ModelAttribute("user") User user) {
+        userService.save(user);
+        return "redirect:/admin";
     }
 
-    @PostMapping("/userCreate")
-    public String createUser(@ModelAttribute("user") User user) {
-        userService.save(user);
+    @PostMapping("/userUpdate")
+    public String updateUser(@ModelAttribute("user") User user) {
+        System.out.println(user.getId());
+        System.out.println(user.getName());
+        System.out.println(user.getEmail());
+
+        userService.update(user);
+
         return "redirect:/admin";
     }
 
@@ -47,18 +54,4 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-    @GetMapping("/edit")
-    public String editUser(@RequestParam("id") Long id, Model model) {
-        User user = userService.getById(id);
-        user.setPassword("");
-        model.addAttribute("roles", roleService.findAll());
-        model.addAttribute("user", user);
-        return "userUpdate";
-    }
-
-    @PutMapping("/userUpdate")
-    public String updateUser(@ModelAttribute("user") User user) {
-        userService.save(user);
-        return "redirect:/admin";
-    }
 }

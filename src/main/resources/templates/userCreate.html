@@ -4,35 +4,60 @@
 <head>
     <meta charset="UTF-8">
     <title>Create user</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
 <div th:align="center">
     <h2><a th:href="@{/logout}" th:text="LogOut"></a></h2>
 </div>
 <div th:align="center">
-    <form action="#" th:action="@{/admin/userCreate}" th:object="${user}" method="post">
-        <label for="name">Name</label>
-        <input type="text" th:field="*{username}" id="name">
-        <label for="name">Surname</label>
-        <input type="text" th:field="*{lastName}" id="surname">
-        <br>
-        <label for="name">Age</label>
-        <input type="text" th:field="*{age}" id="age">
-        <label for="name">Email</label>
-        <input type="text" th:field="*{email}" id="email">
 
-        <label for="name">Password</label>
-        <input type="text" th:field="*{password}" id="password">
-        <br>
-        <label>Roles: </label>
-        <select th:field ="*{roles}">
-            <option th:each="role : ${roles}"
-                    th:text="${role.name}"
-                    th:value="${role.id}">
-            </option>
-        </select>
-        <input type="submit" value="Create User!"/>
+    <form action="#" th:action="@{/admin/userCreate}" th:object="${user}" method="post">
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" th:field="*{username}" id="name" aria-describedby="emailHelp" placeholder="Enter Name">
+        </div>
+        <div class="form-group">
+            <label for="lastName">LastName</label>
+            <input type="text" class="form-control" th:field="*{lastName}" id="lastName" aria-describedby="emailHelp" placeholder="Enter LastName">
+        </div>
+        <div class="form-group">
+            <label for="Age">Age</label>
+            <input type="text" class="form-control" th:field="*{age}" id="Age" aria-describedby="emailHelp" placeholder="Enter Age">
+        </div>
+        <div class="form-group">
+            <label for="Email">Email</label>
+            <input type="text" class="form-control" th:field="*{email}" id="Email" aria-describedby="emailHelp" placeholder="Enter Email">
+        </div>
+        <div class="form-group">
+            <label for="Pass">Password</label>
+            <input type="text" class="form-control" th:field="*{password}" id="pass" aria-describedby="emailHelp" placeholder="Enter Password">
+        </div>
+        <div class="form-group">
+            <label for="exampleFormControlSelect1">Roles</label>
+            <select th:field="*{roles}" multiple class="form-control" id="exampleFormControlSelect1">
+                <option th:each="role : ${roles}"
+                        th:text="${role.name}"
+                        th:value="${role.id}">
+                </option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-success">Submit</button>
     </form>
+
+
 </div>
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
 </body>
 </html>

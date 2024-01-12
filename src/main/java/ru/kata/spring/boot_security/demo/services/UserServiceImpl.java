@@ -14,26 +14,23 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UserServiceImpl implements UserService, UserDetailsService {
+public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    @Autowired
+
     public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
-    @Override
-    public Optional<User> findByUsername(String username) {
-        return userRepository.findByUsername(username);
-    }
 
     @Override
-    public User getById(Long id) {
-        return userRepository.getById(id);
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
+
 
     @Override
     public List<User> findAll() {
@@ -47,18 +44,24 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         userRepository.save(user);
     }
 
+
+    @Override
+    @Transactional
+    public void update(User user) {
+        User userDb = userRepository.getById(user.getId());
+        if (user.getPassword() == null || user.getPassword().isBlank()) {
+            user.setPassword(userDb.getPassword());
+        } else {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
+        userRepository.save(user);
+    }
+
+
     @Transactional
     @Override
     public void deleteById(Long id) {
         userRepository.deleteById(id);
     }
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> user = findByUsername(username);
-        if (user.isEmpty()) {
-            throw new UsernameNotFoundException(String.format("User %s not found", username));
-        }
-        return user.get();
-    }
 }

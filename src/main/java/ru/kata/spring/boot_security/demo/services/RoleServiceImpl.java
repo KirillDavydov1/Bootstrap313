@@ -13,7 +13,7 @@ public class RoleServiceImpl implements RoleService {
 
     private RoleRepository roleRepository;
 
-    @Autowired
+
     RoleServiceImpl(RoleRepository roleRepository) {
         this.roleRepository = roleRepository;
     }
@@ -24,6 +24,7 @@ public class RoleServiceImpl implements RoleService {
         return roleRepository.getById(id);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<Role> findAll() {
         return roleRepository.findAll();

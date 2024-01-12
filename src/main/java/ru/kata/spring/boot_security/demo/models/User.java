@@ -15,6 +15,7 @@ import java.util.List;
 @Table(name = "users")
 public class User implements UserDetails {
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -30,8 +31,6 @@ public class User implements UserDetails {
     private String password;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @LazyCollection(LazyCollectionOption.EXTRA)
-    @Fetch(FetchMode.JOIN)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private List<Role> roles;
@@ -56,14 +55,26 @@ public class User implements UserDetails {
         this.id = id;
     }
 
+
+    public String getName() {
+        return username;
+    }
+
+    public void setName(String username) {
+        this.username = username;
+    }
+
+
+
     @Override
     public String getUsername() {
-        return username;
+        return email;
     }
 
     public void setUsername(String username) {
         this.username = username;
     }
+
 
     public String getLastName() {
         return lastName;
@@ -91,6 +102,7 @@ public class User implements UserDetails {
 
     @Override
     public String getPassword() {
+
         return password;
     }
 
@@ -138,16 +150,4 @@ public class User implements UserDetails {
         return true;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", age=" + age +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", roles=" + roles +
-                '}';
-    }
 }
